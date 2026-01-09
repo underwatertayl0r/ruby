@@ -4786,6 +4786,11 @@ parse_char_class(Node** np, Node** asc_np, OnigToken* tok, UChar** src, UChar* e
           goto err;
         }
 
+        if ((size_t)i > (size_t)ONIGENC_CODE_TO_MBC_MAXLEN) {
+          r = ONIGERR_TOO_SHORT_MULTI_BYTE_STRING;
+          goto err;
+        }
+
         len = enclen(env->enc, buf, buf + i);
         if (i < len) {
           r = ONIGERR_TOO_SHORT_MULTI_BYTE_STRING;
