@@ -7,11 +7,16 @@ stack_alloca_overflow(VALUE self)
     size_t i = 0;
 
     while (1) {
-        // Allocate and touch memory to force actual stack usage:
-        volatile char *stack = alloca(1024);
+        // Allocate and touch memory to force actual memory usage:
+        char *buf = (char *)malloc(1024);
+        if (!buf) {
+            break;
+        }
+        volatile char *stack = buf;
         stack[0] = (char)i;
         stack[1023] = (char)i;
         i++;
+        free(buf);
     }
 
     return Qnil;
